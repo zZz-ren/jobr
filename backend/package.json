@@ -1,0 +1,36 @@
+{
+  "name": "jobr_backend",
+  "version": "1.0.0",
+  "description": "backend folder for jobr application",
+  "homepage": "https://github.com/zZz-ren/jobr#readme",
+  "bugs": {
+    "url": "https://github.com/zZz-ren/jobr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zZz-ren/jobr"
+  },
+  "license": "ISC",
+  "author": "zZz-ren",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./build/index.js",
+    "dev": "npx nodemon"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "node-mailer": "^0.1.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
