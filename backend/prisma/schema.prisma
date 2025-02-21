@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int          @id @default(autoincrement())
+  email            String       @unique
+  location         String?
+  about            String?
+  token            String?
+  phone_no         Int?
+  role             Role         @default(User)
+  publicUrl        String?
+  profilePic       String?
+  headline         String?
+  firstName        String
+  lastName         String
+  password         String
+  twoFactorEnabled Boolean      @default(false)
+  Experience       Experience[]
+  Education        Education[]
+  Followers        Follower[]
+  Post             Post[]
+  resume           resume[]
+
+  isVerified Boolean @default(false)
+}
+
+model Company {
+  id        Int        @id @default(autoincrement())
+  name      String
+  overview  String?
+  headline  String?
+  email     String     @unique
+  password  String
+  token     String
+  role      String     @default("COMPANY")
+  logoUrl   String?
+  employees Int
+  website   String?
+  Followers Follower[]
+  Post      Post[]
+  Job       Job[]
+
+  isVerified Boolean @default(false)
+}
+
+model Experience {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  companyName String
+  position    String
+  startDate   DateTime
+  endDate     DateTime?
+  description String?
+}
+
+model Education {
+  id           Int       @id @default(autoincrement())
+  userId       Int
+  user         User      @relation(fields: [userId], references: [id])
+  schoolName   String
+  degree       String
+  startDate    DateTime
+  endDate      DateTime?
+  fieldOfStudy String?
+}
+
+model Follower {
+  id         Int     @id @default(autoincrement())
+  followerId Int
+  followeeId Int
+  user       User    @relation(fields: [followerId], references: [id])
+  company    Company @relation(fields: [followeeId], references: [id])
+}
+
+model Post {
+  id               Int     @id @default(autoincrement())
+  title            String
+  content          String?
+  coverImg         String?
+  creatorUserId    Int? // Nullable to allow either User or Company
+  creatorCompanyId Int? // Nullable to allow either User or Company
+
+  creatorUser    User?    @relation(fields: [creatorUserId], references: [id])
+  creatorCompany Company? @relation(fields: [creatorCompanyId], references: [id])
+
+  @@unique([creatorUserId, creatorCompanyId])
+}
+
+model Job {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String?
+  companyId   Int
+  company     Company    @relation(fields: [companyId], references: [id])
+  location    String?
+  startDate   DateTime
+  type        JobType
+  arrangment  Arrangment
+  experience  Int
+  skillSet    Json
+}
+
+model resume {
+  id     Int     @id @default(autoincrement())
+  userId Int
+  user   User    @relation(fields: [userId], references: [id])
+  resume String?
+}
+
+enum Arrangment {
+  REMOTE
+  HYBRID
+  ON_SITE
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  INTERNSHIP
+}
+
+enum Role {
+  ADMIN
+  User
+}
